@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Config. geral{{ classifier | upper }}</title>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #0d1117;
+            margin-top: 50px;
+            padding: 0;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px;
+            margin: auto;
+            border: 1px solid #c9d1d9;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .img-confusion-matrix {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center">Configurações {{ classifier | upper }}</h1>
+
+                <form action="{{ url_for('select_classifier', classifier=classifier) }}" method="post">
+                    {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label }}
+                            {{ field(class_='form-control') }}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-success">Treinar  {{ classifier | upper }}</button>
+                </form>
+
+                <form action="{{ url_for('index') }}" method="get" class="mb-4" style="margin-top: 15px;">
+                    <button type="submit" class="btn btn-primary">Voltar</button>
+                </form>
+
+                {% if matrix_image %}
+                    <h2 class="text-center">Resultado</h2>
+                    <img src="{{ url_for('static', filename=matrix_image) }}" alt="Matriz de Confusão" class="img-confusion-matrix">
+                    <h3 class="text-center">Acuracia:</h3>
+                    <p class="text-center">Aparece no python</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
